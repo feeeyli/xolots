@@ -39,8 +39,6 @@ type UsingAnimationNode = {
 };
 
 export class Magik {
-  result = "";
-
   #parseArray<T>(arr: T[]) {
     return `["${arr.join('", "')}"]`;
   }
@@ -48,13 +46,9 @@ export class Magik {
   parseItem(id: ItemId, json: string) {
     const data = JSON.parse(json);
 
-    this.result = `Xolots.item("${id}")`;
-
-    this.#resolveAndInsertNode(data.model);
-
-    this.result += ";";
-
-    console.log(this.result);
+    console.log(
+      `Xolots.item("${id}", ${this.#resolveNode(data.model)}).register();`,
+    );
   }
 
   #resolveNode(node: Node): string | string[] {
@@ -63,11 +57,12 @@ export class Magik {
       node.property === "minecraft:display_context"
     ) {
       return [
+        "Xolots.display()",
         ...node.cases.map((c) => {
-          return `.display(${this.#parseArray(c.when)}, ${this.#resolveNode(c.model)})`;
+          return `.case(${this.#parseArray(c.when)}, ${this.#resolveNode(c.model)})`;
         }),
         `.fallback(${this.#resolveNode(node.fallback)})`,
-      ];
+      ].join("");
     }
 
     if (node.type === "minecraft:model") {
@@ -95,17 +90,5 @@ export class Magik {
     }
 
     return "<ERROR>";
-  }
-
-  #resolveAndInsertNode(node: Node) {
-    const resolved = this.#resolveNode(node);
-
-    if (typeof resolved === "string") {
-      this.result += resolved;
-    } else {
-      resolved.forEach((r) => {
-        this.result += r;
-      });
-    }
   }
 }

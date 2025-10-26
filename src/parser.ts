@@ -1,7 +1,7 @@
 import type { Xolots } from ".";
 import { Display } from "./models/display";
-import type { Model } from "./models/model";
-import { Path } from "./models/path";
+import type { Node } from "./models/node";
+import { Model } from "./models/path";
 import { Renameable } from "./models/renameable";
 import type { Fallback } from "./models/types";
 import { UsingAnimation } from "./models/using-animation";
@@ -32,8 +32,8 @@ export class Parser {
     return this.#resolveModel(id, fallback);
   }
 
-  #resolveModel(id: string, model: Model): { [key: string]: unknown } {
-    if (model instanceof Path) {
+  #resolveModel(id: string, model: Node): { [key: string]: unknown } {
+    if (model instanceof Model) {
       if (model.modelPath?.startsWith("#")) {
         if (!model.pathName) throw new Error(`unnamed model for item ${id}`);
 

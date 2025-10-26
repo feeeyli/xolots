@@ -1,7 +1,3 @@
-import type { Model } from "./model";
-
-export type Fallback = string | Model;
-
 export type DisplayContext =
   | "thirdperson_lefthand"
   | "thirdperson_righthand"

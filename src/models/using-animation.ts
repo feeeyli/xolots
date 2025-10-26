@@ -1,35 +1,30 @@
-import type { Fallback } from "./types";
-import type { Path } from "./path";
-import { Model } from "./model";
+import type { Model } from "./path";
+import { Node } from "./node";
 
 type UsingAnimationEntry = {
   threshold: number;
-  model: Path;
+  model: Model;
 };
 
-export class UsingAnimation extends Model {
+export class UsingAnimation extends Node {
   entries: UsingAnimationEntry[] = [];
-  _fallback?: Fallback;
+  _fallback?: Node;
 
-  constructor() {
-    super("using_animation");
-  }
-
-  model(model: Path, threshold: number) {
+  model(model: Model, threshold: number) {
     this.entries.push({ threshold, model });
 
     return this;
   }
 
-  fallback(fallback: Fallback) {
-    this._fallback = fallback;
+  fallback(node: Node) {
+    this._fallback = node;
 
     return this;
   }
 
   dynamic(
     entries: number[],
-    callbackFn: (index: number, threshold: number) => Path,
+    callbackFn: (index: number, threshold: number) => Model,
   ) {
     entries.forEach((entry, index) => {
       this.entries.push({ threshold: entry, model: callbackFn(index, entry) });

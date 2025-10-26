@@ -1,12 +1,12 @@
-import { Model } from "./model";
+import { Node } from "./node";
 
-export class Path extends Model {
+export class Model extends Node {
   modelPath: string;
   texturePath?: string;
   pathName?: string;
 
   constructor(modelPath: string) {
-    super("path");
+    super();
     this.modelPath = modelPath;
   }
 

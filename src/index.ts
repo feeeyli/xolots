@@ -1,8 +1,8 @@
 import type { ItemId } from "./@types/itemId";
 import { Item } from "./item";
 import { Display } from "./models/display";
-import type { Model } from "./models/model";
-import { Path } from "./models/path";
+import type { Node } from "./models/node";
+import { Model } from "./models/path";
 import { Renameable } from "./models/renameable";
 import type { DisplayContext } from "./models/types";
 import { UsingAnimation } from "./models/using-animation";
@@ -10,16 +10,16 @@ import { Parser } from "./parser";
 
 export const Models = {
   custom(path: string) {
-    return new Path(path);
+    return new Model(path);
   },
   flat(texturePath: string, name: string) {
-    return new Path("#flat").texture(texturePath).name(name);
+    return new Model("#flat").texture(texturePath).name(name);
   },
   handheld(texturePath: string, name: string) {
-    return new Path("#handheld").texture(texturePath).name(name);
+    return new Model("#handheld").texture(texturePath).name(name);
   },
   fromItem(id: ItemId) {
-    return new Path(`minecraft:item/${id}`).texture(`minecraft:item/${id}`);
+    return new Model(`minecraft:item/${id}`).texture(`minecraft:item/${id}`);
   },
 };
 
@@ -38,8 +38,8 @@ export const DisplayContexts = {
 export class Xolots {
   items: Item[] = [];
 
-  item(id: ItemId) {
-    return new Item(id, (item) => {
+  item(id: ItemId, model: Node) {
+    return new Item(id, model, (item) => {
       this.items.push(item);
     });
   }
@@ -52,8 +52,8 @@ export class Xolots {
     return new UsingAnimation();
   }
 
-  display(context: DisplayContext[], model: Model) {
-    return new Display(context, model);
+  display() {
+    return new Display();
   }
 
   final() {

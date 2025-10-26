@@ -1,21 +1,16 @@
-import type { Fallback } from "./types";
-import type { Path } from "./path";
-import { Model } from "./model";
+import type { Model } from "./path";
+import { Node } from "./node";
 
 type RenameableCase = {
   names: string[];
-  model: Path;
+  model: Model;
 };
 
-export class Renameable extends Model {
+export class Renameable extends Node {
   cases: RenameableCase[] = [];
-  _fallback?: Fallback;
+  _fallback?: Node;
 
-  constructor() {
-    super("renameable");
-  }
-
-  case(names: string[], model: Path) {
+  case(names: string[], model: Model) {
     this.cases.push({
       names,
       model,
@@ -24,15 +19,8 @@ export class Renameable extends Model {
     return this;
   }
 
-  // model(model: Model) {
-  //   this.cases.modelPath = model.modelPath;
-  //   this.cases.texturePath = model.texturePath;
-
-  //   return this;
-  // }
-
-  fallback(fallback: Fallback) {
-    this._fallback = fallback;
+  fallback(node: Node) {
+    this._fallback = node;
 
     return this;
   }
